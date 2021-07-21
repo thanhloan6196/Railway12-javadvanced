@@ -1,0 +1,12 @@
+DROP DATABASE IF EXISTS hibernate;
+CREATE DATABASE hibernate;
+USE hibernate;
+
+DROP TABLE IF EXISTS hocsinh;
+CREATE TABLE hocsinh (
+`id` INT AUTO_INCREMENT,
+`name` VARCHAR(45) NULL,
+PRIMARY KEY (`id`)
+);
+
+
