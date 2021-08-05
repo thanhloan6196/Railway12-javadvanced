@@ -34,4 +34,6 @@ public class PositionController {
 	public void updatePosition(@RequestBody Position position) {
 		positionService.update(position);
 	}
+	
+	
 }

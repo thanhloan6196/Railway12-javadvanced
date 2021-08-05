@@ -1,0 +1,135 @@
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                     <!-- success alert -->
+                     <div class="alert alert-success" id="success-alert" style="display: none;">
+                         <button type="button" class="close" data-dismiss="alert">x</button>
+                         <strong class="response-alert">Success! </strong>
+                     </div>
+
+
+                     <form>
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="username">UserName</label>
+                            <input type="text" class="form-control" id="search-username" placeholder="username">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="">FullName</label>
+                            <input type="text" class="form-control" id="search-fullname" placeholder="fullname">
+                          </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label for="inputAddress">Email</label>
+                          <input type="text" class="form-control" id="search-email" placeholder="email">
+                        </div>
+                        
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="position">Position</label>
+                            <select id="search-position" class="form-control">
+                              
+                            </select>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="department">Department</label>
+                            <select id="search-department" class="form-control">
+                              
+                            </select>
+                          </div>
+                          
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <button type="button" class="btn btn-primary" onclick="search(0)">Tìm kiếm</button>
+                            </div>
+                        </div>
+                        
+                      </form>
+
+
+                      
+
+                <div class="col-sm-8">
+                    <h2>Account <b>View List</b></h2>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-info add-new" data-toggle="modal" onclick="openAddModal()"><i class="fa fa-plus"></i> Add New</button>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th onclick="sort('email')">Email</th>
+                    <th onclick="sort('userName')">Username</th>
+                    <th onclick="sort('fullName')">FullName</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <!-- Phan trang -->
+        <nav aria-label="...">
+            <ul class="pagination">
+              
+            </ul>
+          </nav>
+
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Account</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- body -->
+                <div class="modal-body">
+                    <div class="modal-container">
+
+                        <input type="hidden" id="id" name="id">
+
+                        <label for="name"><b>Email: </b></label>
+                        <input type="text" placeholder="Enter Email" name="email" id="email" required>
+                        <label class = "error" id = "email-err"></label> <br>
+
+                        <label for="name"><b>UserName: </b></label>
+                        <input type="text" placeholder="Enter username" name="username" id="username" required>
+                        <label class = "error" id = "username-err"></label> <br>
+
+                        <label for="name"><b>Full Name: </b></label>
+                        <input type="text" placeholder="Enter Full Name" name="fullname" id="fullname" required>
+                        <label class = "error" id = "fullname-err"></label> <br>
+
+                        <label for="position"><b>Position: </b></label>
+                        <select class="form-select" aria-label="Default select example" id="position">
+                        </select>
+                        <label for="department"><b>Department: </b></label>
+                        <select class="form-select" aria-label="Default select example" id="department">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="save()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

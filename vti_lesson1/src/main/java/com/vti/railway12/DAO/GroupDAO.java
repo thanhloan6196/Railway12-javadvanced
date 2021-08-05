@@ -28,18 +28,18 @@ public class GroupDAO {
 		return session.createQuery(hql, Group.class).getResultList();
 	}
 	
-	public void save(final Group group) {
+	public void save(Group group) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.save(group);
 	}
 
-	public void update(final Group group) {
+	public void update(Group group) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.update(group);
 	}
 
-	public void delete(final Group group) {
+	public void delete(int id) {
 		Session session = this.sessionFactory.getCurrentSession();
-		session.remove(group);
+		session.remove(id);
 	}
 }

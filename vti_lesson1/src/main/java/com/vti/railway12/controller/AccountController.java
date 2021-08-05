@@ -18,20 +18,31 @@ import com.vti.railway12.service.AccountService;
 public class AccountController {
 
 	@Autowired
-	  private AccountService accountService;
-	
-	
+	private AccountService accountService;
+
 	@GetMapping("/account-list")
 	public List<Account> getAllAccount() {
 		return accountService.findAll();
 	}
-	
+
 	@GetMapping("account/{id}")
 	public Account getById(@PathVariable int id) {
 		return accountService.findById(id);
 	}
+
 	@PostMapping("/update")
 	public void update(@RequestBody Account account) {
 		accountService.update(account);
 	}
+
+	@PostMapping("/create")
+	public void createAccount(@RequestBody Account account) {
+		accountService.save(account);
+	}
+	
+	@PostMapping("/delete")
+	public void deleteAccount(@RequestBody Account account) {
+		accountService.delete(account);
+	}
+
 }
