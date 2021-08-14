@@ -16,7 +16,7 @@ public class GroupService {
 	@Autowired
 	private GroupDAO groupDAO;
 	
-	public Group findById(final int id) {
+	public Group findById(int id) {
 		return groupDAO.findById(id);
 	}
 
@@ -24,15 +24,15 @@ public class GroupService {
 		return groupDAO.findAll();
 	}
 	
-	public void save(final Group group) {
+	public void save(Group group) {
 		groupDAO.save(group);
 	}
 
-	public void update(final Group group) {
+	public void update(Group group) {
 		groupDAO.update(group);
 	}
 
-	public void delete(final Group group) {
-		groupDAO.delete(group);
+	public void delete(int id) {
+		groupDAO.delete(id);
 	}
 }

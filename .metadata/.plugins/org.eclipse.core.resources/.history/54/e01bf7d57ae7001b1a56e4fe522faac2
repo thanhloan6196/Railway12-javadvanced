@@ -1,8 +1,0 @@
-package com.vti.railway12.controller;
-
-import org.springframework.stereotype.Controller;
-
-@Controller
-public class HocSinhController {
-
-}

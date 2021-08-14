@@ -16,7 +16,7 @@ public class AccountDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public Account findById(final int id) {
+	public Account findById(int id) {
 		Session session = this.sessionFactory.getCurrentSession();
 		return session.get(Account.class, id);
 	}
@@ -27,17 +27,17 @@ public class AccountDAO {
 		return session.createQuery(hql, Account.class).getResultList();
 	}
 	
-	public void save(final Account account) {
+	public void save(Account account) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.save(account);
 	}
 
-	public void update(final Account account) {
+	public void update(Account account) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.update(account);
 	}
 
-	public void delete(final Account account) {
+	public void delete(Account account) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.remove(account);
 	}

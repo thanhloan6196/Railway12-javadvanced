@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vti.railway12.entity.HocSinh;
 import com.vti.railway12.entity.Position;
 
 @Repository(value = "positionDAO")
