@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ import com.vti.railway12.service.IAccountService;
 
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AccountController {
 
 	@Autowired
@@ -34,6 +35,7 @@ public class AccountController {
 	private static Logger logger = LoggerFactory.getLogger(AccountController.class);
 	
 	@GetMapping("/account-list")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
 	ResponseEntity<Page<Account>> getListAccount(@RequestParam int page, @RequestParam String collum) {
 		Page<Account> listAccount = accountService.getAllAccount(page, collum);
 		
@@ -46,6 +48,7 @@ public class AccountController {
 	
 	
 	@GetMapping("/get-account")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
 	ResponseEntity<Account> getAccount(@RequestParam Long id){
 		
 		Account account = accountService.getAccountById(id);
@@ -54,6 +57,7 @@ public class AccountController {
 	
 	
 	@PostMapping("/create")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
     public ResponseEntity<?> createAccount(@RequestBody @Valid Account account, BindingResult bindingResult) throws Exception {
 		if(bindingResult.hasErrors()) {
 			throw new Exception(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -74,6 +78,7 @@ public class AccountController {
     }
 	
 	@PostMapping("/update")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
     public ResponseEntity<?> updateAccount(@RequestBody @Valid Account account,BindingResult bindingResult ) throws Exception {
 		if(bindingResult.hasErrors()) {
 			throw new Exception(bindingResult.getAllErrors().get(0).getDefaultMessage());
@@ -98,6 +103,7 @@ public class AccountController {
     }	
 	
 	@PostMapping("/delete")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteAccount(@RequestBody Account account) {
 		String fullName = accountService.getAccountById(account.getId()).getFullName();
 		accountService.deleteAccount(account);
@@ -105,6 +111,7 @@ public class AccountController {
     }
 	
 	@PostMapping("/search")
+	@PreAuthorize("hasRole('USER') or hasRole('VTI') or hasRole('ADMIN')")
 	public ResponseEntity<?> searchAccount(@RequestBody FormSearchAccount account) {
 		Page<Account> listAccount = accountService.search(account);
 		return new ResponseEntity<Page<Account>>(listAccount, HttpStatus.OK);

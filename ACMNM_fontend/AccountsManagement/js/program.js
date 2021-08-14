@@ -3,6 +3,19 @@ $(function () {
     $(".main").load("home.html");
     $(".footer").load("footer.html");
 
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    var sPath = window.location.pathname;
+    var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+    if (sPage == "login.html") {
+
+    } else {
+        if (userInfo === "undefined" || userInfo === null) {
+            window.location.replace("http://127.0.0.1:5500/html/login.html");
+            return;
+        }
+    }
+    
     getListAccounts(0, 'id');
     getListDepartment();
     getListPosition();
@@ -24,6 +37,8 @@ var positions = [];
 var pageNumber = 0;
 var totalPage = 0;
 var sortCollum = "id";
+var userInfo = {};
+
 
 function Account(id, email, userName, fullName, createDate) {
     this.id = id;
@@ -34,26 +49,27 @@ function Account(id, email, userName, fullName, createDate) {
 }
 
 function getListAccounts(page, collum) {
-    // call API from server
-    $.get("http://localhost:8080/account/account-list?page=" + page + "&collum="+collum, function (data, status) {
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-        // reset list account
-        accounts = [];
-
-        // error
-        if (status == "error") {
-            // TODO
+    $.ajax({
+        url: "http://localhost:8080/account/account-list?page=" + page + "&collum=" + collum,
+        type: 'GET',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+        data: {},
+        success: function (data, status) {
+            totalPage = data.totalPages;
+            pageNumber = data.number;
+            parseData(data.content);
+            fillAccountsToTable();
+            fillDataToSelection();
+            fillPageable();
+        },
+        error: function () {
             alert("Error when loading data");
             return;
-        }
-
-        // success
-        totalPage = data.totalPages;
-        pageNumber = data.number;
-        parseData(data.content);
-        fillAccountsToTable();
-        fillDataToSelection();
-        fillPageable();
+        },
     });
 }
 
@@ -214,9 +230,16 @@ function addAccount() {
         position: position
     };
 
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     $.ajax({
         url: 'http://localhost:8080/account/create',
         type: 'POST',
+
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+
+
         data: JSON.stringify(account), // body
         contentType: "application/json", // type of body (json, xml, text)
         // dataType: 'json', // datatype return
@@ -337,9 +360,17 @@ function updateAccount() {
         position: position
     };
 
+
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     $.ajax({
         url: 'http://localhost:8080/account/update',
         type: 'POST',
+
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+
+
         data: JSON.stringify(account),
         contentType: "application/json",
         success: function (data, textStatus, xhr) {
@@ -388,9 +419,17 @@ function deleteAccount(id) {
     var account = {
         id: id
     };
+
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     $.ajax({
         url: 'http://localhost:8080/account/delete',
         type: 'POST',
+
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+
+
         data: JSON.stringify(account),
         contentType: "application/json",
         success: function (data, textStatus, xhr) {
@@ -416,36 +455,43 @@ function showSuccessAlert(msg) {
 
 
 function getListDepartment() {
-    $.get("http://localhost:8080/department/department-list", function (data, status) {
-        // reset list account
-        departments = [];
-        // error
-        if (status == "error") {
-            // TODO
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    $.ajax({
+    url: "http://localhost:8080/department/department-list",
+        type: 'GET',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+        data: {},
+        success: function (data, status) {
+            departments = data;
+        },
+        error: function () {
             alert("Error when loading data");
             return;
-        }
-        // success
-       
-        departments = data;
-    });
-}
-function getListPosition() {
-    $.get("http://localhost:8080/position/position-list", function (data, status) {
-        // reset list account
-        positions = [];
-        // error
-        if (status == "error") {
-            // TODO
-            alert("Error when loading data");
-            return;
-        }
-        // success
-       
-        positions = data;
+        },
     });
 }
 
+
+function getListPosition() {
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    $.ajax({
+        url: "http://localhost:8080/position/position-list",
+            type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+            },
+            data: {},
+            success: function (data, status) {
+                positions = data;
+            },
+            error: function () {
+                alert("Error when loading data");
+                return;
+            },
+        });
+}
 
 function fillDateToSelectOption() {
     $('#department').empty();
@@ -496,9 +542,17 @@ function search(page) {
         positionID: positionID
     };
 
+
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     $.ajax({
         url: 'http://localhost:8080/account/search',
         type: 'POST',
+
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
+        },
+
+
         data: JSON.stringify(account),
         contentType: "application/json",
         success: function (data, textStatus, xhr) {
@@ -561,4 +615,43 @@ function goPrePageSearch() {
 function sort(collum){
     sortCollum = collum;
     getListAccounts(pageNumber, collum);
+}
+
+
+function login() {
+    var loginUserName = document.getElementById("login-username").value;
+    var loginPassword = document.getElementById("login-password").value;
+
+    var loginRequest = {
+        username: loginUserName,
+        password: loginPassword
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/api/auth/signin',
+        type: 'POST',
+        data: JSON.stringify(loginRequest),
+        contentType: "application/json",
+        success: function (data, textStatus, xhr) {
+            localStorage.setItem('userInfo', JSON.stringify(data));
+           // userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            window.location.replace("http://127.0.0.1:5500/html/program.html");
+            getListAccounts(0, 'id');
+            getListDepartment();
+            getListPosition();
+            fillDataToSelection();
+        },
+        error(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+
+}
+
+
+function logOut(){
+    localStorage.removeItem('userInfo');
+    window.location.replace("http://127.0.0.1:5500/html/login.html");
 }

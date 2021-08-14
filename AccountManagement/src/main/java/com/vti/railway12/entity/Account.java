@@ -1,8 +1,7 @@
 package com.vti.railway12.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,12 +10,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.vti.railway12.audit.Auditable;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "account")
-public class Account {
+public class Account extends Auditable<String>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,12 +38,7 @@ public class Account {
 	@ManyToOne
 	private Position position;
 	
-	@UpdateTimestamp
-	private Date updateAt;
-
-	@CreationTimestamp
-	private Date createDate;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -93,22 +89,7 @@ public class Account {
 		this.position = position;
 	}
 
-	public Date getUpdateAt() {
-		return updateAt;
-	}
-
-	public void setUpdateAt(Date updateAt) {
-		this.updateAt = updateAt;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
+	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
