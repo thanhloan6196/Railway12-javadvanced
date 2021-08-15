@@ -224,7 +224,7 @@ function addStudent() {
     $.ajax({
         url: 'http://localhost:8080/student/create',
         type: 'POST',
-        data: JSON.stringify(student), // body
+        data: JSON.stringify({...student, clazz: classs}), // body
         contentType: "application/json", // type of body (json, xml, text)
         // dataType: 'json', // datatype return
         success: function (data, textStatus, xhr) {
@@ -250,15 +250,16 @@ function addStudent() {
 function openUpdateModal(id) {
     fillDateToSelectOption();
     // get index from account's id
-    var index = accounts.findIndex(x => x.id == id);
+    var index = students.findIndex(x => x.id == id);
 
     // fill data
-    document.getElementById("id").value = accounts[index].id;
-    document.getElementById("email").value = accounts[index].email;
-    document.getElementById("username").value = accounts[index].userName;
-    document.getElementById("fullname").value = accounts[index].fullName;
-    document.getElementById("department").value = accounts[index].department.id;
-    document.getElementById("position").value = accounts[index].position.id;
+    document.getElementById("id").value = students[index].id;
+    document.getElementById("email").value = students[index].email;
+    document.getElementById("firstname").value = students[index].firstName;
+    document.getElementById("lastname").value = students[index].lastName;
+    document.getElementById("address").value = students[index].lastName;   
+    document.getElementById("gender").value = students[index].gender;
+    document.getElementById("class").value = students[index].clazz.id;
 
     openModal();
 }
@@ -278,18 +279,14 @@ function updateStudent() {
     // get data
     // get data
     var email = document.getElementById("email").value;
-    var userName = document.getElementById("username").value;
-    var fullName = document.getElementById("fullname").value;
-    var departmentID = document.getElementById("department").value;
-    var positionID = document.getElementById("position").value;
+    var firstName = document.getElementById("firstname").value;
+    var lastName = document.getElementById("lastname").value;
+    var address = document.getElementById("address").value;
+    var gender = document.getElementById("gender").value;
+    var classID = document.getElementById("class").value;
     // TODO validate
     // then fail validate ==> return;
-    var department = {
-        id: departmentID
-    }
-    var position = {
-        id: positionID
-    }
+
     if (email === "") {
         $('#email-err').append(
             "Email không được trống. Hãy nhập email")
@@ -302,36 +299,36 @@ function updateStudent() {
             "Email không đúng định dạng. Hãy nhập lại email")
         return;
     }
-    if (userName === "") {
-        $('#username-err').append(
-            "userName không được trống. Hãy nhập userName")
+    if (firstName === "") {
+        $('#firstName-err').append(
+            "firstName không được trống. Hãy nhập firstName")
         return;
     } else {
-        $('#username-err').empty();
+        $('#firstName-err').empty();
     }
-    if (fullName === "") {
-        $('#fullname-err').append(
-            "fullname không được trống. Hãy nhập fullName")
+    if (lastName === "") {
+        $('#lastName-err').append(
+            "lastName không được trống. Hãy nhập lastName")
         return;
     } else {
-        $('#fullname-err').empty();
+        $('#lastName-err').empty();
     }
-    var account = {
+    var classs =  {
+        id: classID
+    }
+    var student = {
         id: id,
         email: email,
-        userName: userName,
-        fullName: fullName,
-        department: department,
-        position: position
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender,
+        address: address,
+        clazz: classs
     };
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     $.ajax({
-        url: 'http://localhost:8081/account/update',
+        url: 'http://localhost:8080/student/update',
         type: 'POST',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + userInfo.accessToken);
-        },
-        data: JSON.stringify(account),
+        data: JSON.stringify(student),
         contentType: "application/json",
         success: function (data, textStatus, xhr) {
             // success
@@ -356,7 +353,6 @@ function updateStudent() {
         }
     });
 }
-
 
 function openConfirmDelete(id) {
     // get index from account's id
@@ -494,6 +490,6 @@ function goPrePageSearch() {
 function sort(collum) {
     // console.log("name", collum);
     sortCollum = collum;
-    getListAccounts(pageNumber, collum);
+    getListStudents(pageNumber, collum);
 }
 

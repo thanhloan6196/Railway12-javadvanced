@@ -25,7 +25,7 @@ public class StudentServiceImpl implements IStudentService {
 	
 	@Override
 	public Page<Student> getAllStudent(int page, String collum) {
-		Pageable pageable =  PageRequest.of(page, totalRecords, Sort.by(collum).ascending());
+		Pageable pageable =  PageRequest.of(page, totalRecords, Sort.by(collum));
 		return studentRepository.findAll(pageable);
 	}
 
